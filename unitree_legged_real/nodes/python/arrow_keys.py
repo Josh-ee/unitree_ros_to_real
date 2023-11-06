@@ -26,12 +26,18 @@ def on_press(key):
             msg_high_cmd.yawSpeed = 1.0  # Turn left
         elif key.char == 'd':
             msg_high_cmd.yawSpeed = -1.0  # Turn right
+        elif key.char == 'q':
+            msg_high_cmd.velocity[1] = 1.0  # Turn left
+        elif key.char == 'e':
+            msg_high_cmd.velocity[1] = -1.0  # Turn right
 
 def on_release(key):
     global msg_high_cmd
     # This function will be called whenever a key is released
-    msg_high_cmd.velocity[0] = 0.0  # Stop forward/backward motion
+    msg_high_cmd.velocity[0] = 0.0 # Stop forward/backward motion
+    msg_high_cmd.velocity[1] = 0.0 # Stop left/right strafe
     msg_high_cmd.yawSpeed = 0.0  # Stop turning
+
 
 
 def walk_with_fixed_vel(msg_high_cmd,pub2high_cmd,ros_loop,Nsteps_timeout):
@@ -77,7 +83,7 @@ if __name__ == "__main__":
 
     rate_freq_send_commands = 120 # Hz
  
-    time_tot = 4.0 # sec
+    time_tot = 15.0 # sec
 
     print("time_tot: {0:f}".format(time_tot))
 
@@ -106,6 +112,7 @@ if __name__ == "__main__":
     rospy.loginfo("Ready to start the movement. Press enter to continue ...")
 
     listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+    listener.start()
     listener_thread = threading.Thread(target=listener.join)
     listener_thread.start()
 
